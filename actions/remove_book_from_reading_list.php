@@ -8,13 +8,23 @@
     $book_id =  $_POST['book_name'];
     $user_id =  $_POST['user_id'];
 
-    echo $reading_list_name;
-    echo $book_name;
-    echo $user_id;
+    $sql = "DELETE FROM BooksInReadingLists WHERE book_id IN (SELECT Id FROM Books WHERE title='".$book_name."') AND reading_list_id IN (SELECT Id FROM ReadingLists WHERE name='".$reading_list_name."' AND user_id=".$user_id.");";
 
-    $delete_stmt = "DELETE FROM BooksInReadingLists WHERE book_id IN (SELECT Id FROM Books WHERE title='".$book_name."') AND reading_list_id IN (SELECT Id FROM ReadingLists WHERE name='".$reading_list_name."' AND user_id=".$user_id.");";
+    $stmt = oci_parse($conn, $sql);
+    $err = oci_error($stmt);
+    if ($err) {
+        oci_rollback($conn);
+        $err_code = $err['code'];
 
-    echo $delete_stmt;
+        if($err_code == 1) {
+            $error_msg = "Your User ID is already used. Please try another User ID.<br>\n";
+        } else {
+            $error_msg = "Some unknown database error occured. Please inform database administator with these error messages.<br>\n"."Error code : ".$err['code']."<br>"."Error message : ".$err['message']."<br>";
+        }
+    } else {
+        oci_commit($conn);
+    }
+
     oci_close($conn);
     print "<p>Thank you, the book is removed</p>";
   ?>
