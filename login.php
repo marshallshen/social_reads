@@ -7,6 +7,7 @@
         padding-top: 40px;
         padding-bottom: 40px;
         background-color: #f5f5f5;
+        background-image: url("assets/books.jpg");
       }
 
       .form-signin {
@@ -37,9 +38,36 @@
   </head>
   <body>
     <div class="container">
-      <h2> Welcome to Social Reads </h2>
-      <h3> A social Network for readers </h3>
-      <form class="form-signin" action="user.php" method="post">
+      <h2><span style="color:white">Welcome to Social Reads</span></h2>
+      <h3><span style="color:white">A social Network for readers</span></h3>
+      <?php
+        $user_id = $_POST['id'];
+        $password = $_POST['password'];
+
+        if(!is_null($user_id)){
+          ini_set('display_errors', 'On');
+          $db = "some_db";
+          $conn = oci_connect("username", "password", $db);
+
+          $sql = "SELECT COUNT(*) FROM Users WHERE id=".$user_id." AND password='".$password."'";
+
+          $stmt = oci_parse($conn, $sql);
+          oci_execute($stmt, OCI_DEFAULT);
+          while ($res = oci_fetch_row($stmt))
+          {
+            $count = $res[0];
+          }
+
+          if($count > 0){
+            oci_close($conn);
+            header('Location: user.php?id='.$user_id);
+          } else {
+            oci_close($conn);
+            print "<div class='alert alert-error'> Login invalid </div>";
+          }
+        }
+      ?>
+      <form class="form-signin" action="login.php" method="post">
         <h2 class="form-signin-heading">Please sign in</h2>
         <input type="text" class="input-block-level" placeholder="User Id" name="id">
         <input type="password" class="input-block-level" placeholder="Password" name="password">

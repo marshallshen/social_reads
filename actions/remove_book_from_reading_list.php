@@ -5,8 +5,8 @@
   </head>
   <?php
     ini_set('display_errors', 'On');
-    $db = "w4111c.cs.columbia.edu:1521/adb";
-    $conn = oci_connect("fs2458", "KbqshQrx", $db);
+    $db = "some_db";
+    $conn = oci_connect("username", "password", $db);
 
     $reading_list_name =  $_POST['reading_list_name'];
     $book_id =  $_POST['book_id'];
@@ -14,9 +14,8 @@
 
     $sql = "DELETE FROM BooksInReadingLists WHERE book_id=".$book_id." AND reading_list_id IN (SELECT Id FROM ReadingLists WHERE name='".$reading_list_name."' AND user_id=".$user_id.")";
 
-    echo $sql;
-
     $stmt = oci_parse($conn, $sql);
+    oci_execute($stmt, OCI_DEFAULT);
     $err = oci_error($stmt);
     if ($err) {
         oci_rollback($conn);
@@ -32,7 +31,7 @@
         }
     } else {
         oci_commit($conn);
-        print "<div class='alert alert-success'><p>Thank you, the book is rmoved from your reading lists</p></div>";
+        print "<div class='alert alert-success'><p>Thank you, the book is removed from your reading lists</p></div>";
     }
 
     oci_close($conn);

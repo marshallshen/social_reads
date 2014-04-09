@@ -10,8 +10,8 @@
     $description = $_POST['description'];
 
     ini_set('display_errors', 'On');
-    $db = "w4111c.cs.columbia.edu:1521/adb";
-    $conn = oci_connect("fs2458", "KbqshQrx", $db);
+    $db = "some_db";
+    $conn = oci_connect("username", "password", $db);
     // increment the primary key
     $count_stmt = oci_parse($conn, "select COUNT(*) from Comments");
     oci_execute($count_stmt, OCI_DEFAULT);
@@ -45,6 +45,6 @@
     oci_close($conn);
   ?>
   <footer>
-    <p><a href="../user.php?id=<?php echo $user_id?>"> Back to homepage</p
+    <p><a href="../user.php?id=<?php echo $user_id?>"> Back to homepage</p>
   </footer>
 </html>

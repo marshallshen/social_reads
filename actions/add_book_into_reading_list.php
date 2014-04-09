@@ -5,8 +5,8 @@
   </head>
   <?php
     ini_set('display_errors', 'On');
-    $db = "w4111c.cs.columbia.edu:1521/adb";
-    $conn = oci_connect("fs2458", "KbqshQrx", $db);
+    $db = "some_db";
+    $conn = oci_connect("username", "password", $db);
 
     $reading_list_name = $_POST['reading_list_name'];
     $book_id = $_POST['book_id'];

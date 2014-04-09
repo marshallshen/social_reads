@@ -20,8 +20,8 @@
         print "<h3>Book Summary</p>";
 
         ini_set('display_errors', 'On');
-        $db = "w4111c.cs.columbia.edu:1521/adb";
-        $conn = oci_connect("fs2458", "KbqshQrx", $db);
+        $db = "some_db";
+        $conn = oci_connect("username", "password", $db);
 
         $book_stmt = oci_parse($conn, $query_for_book);
         oci_execute($book_stmt, OCI_DEFAULT);
@@ -57,25 +57,35 @@
         oci_close($conn);
       ?>
 
-      <section>
-      <h3> Add new comments </p>
-      <form action="actions/add_comment.php" method="post">
-        <p>Rating:
-            <select name="rating">
-                <option value=1> 1 </option>
-                <option value=2> 2 </option>
-                <option value=3> 3 </option>
-                <option value=4> 4 </option>
-                <option value=5> 5 </option>
-            </select>
-        </p>
+      <a href="#myModal" role="button" class="btn" data-toggle="modal">Add a new comment</a>
+      <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="myModalLabel">Add a comment</h3>
+        </div>
+        <div class="modal-body">
+          <form action="actions/add_comment.php" method="post">
+            <p>Rating:
+                <select name="rating">
+                    <option value=1> 1 </option>
+                    <option value=2> 2 </option>
+                    <option value=3> 3 </option>
+                    <option value=4> 4 </option>
+                    <option value=5> 5 </option>
+                </select>
+            </p>
+            <textarea cols="100" rows="10" name="description"> Enter your comment here..</textarea>
+            <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
+            <input type="hidden" name="book_id" value="<?php echo $book_id; ?>">
+            <p><input type="submit"/></p>
+          </form>
+        </div>
+      </div>
 
-        <textarea cols="60" rows="5" name="description"> Enter your comment here..</textarea>
-        <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
-        <input type="hidden" name="book_id" value="<?php echo $book_id; ?>">
-        <p><input type="submit"/></p>
-      </form>
-      </section>
+      <p><a href="../social_reads/user.php?id=<?php echo $user_id?>"> Back to homepage</p>
   </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="assets/bootstrap.min.js"></script>
   </body>
 </html>
