@@ -1,20 +1,26 @@
 <html>
+  <head>
+    <title>Add book to reading list</title>
+    <link href="../assets/bootstrap-2-3-2.css" rel="stylesheet">
+  </head>
   <?php
     ini_set('display_errors', 'On');
-    $db = "w4111b.cs.columbia.edu:1521/adb";
+    $db = "w4111c.cs.columbia.edu:1521/adb";
     $conn = oci_connect("fs2458", "KbqshQrx", $db);
 
-    $reading_list_name =  $_POST['reading_list_name'];
-    $book_id =  $_POST['book_id'];
-    $user_id =  $_POST['user_id'];
+    $reading_list_name = $_POST['reading_list_name'];
+    $book_id = $_POST['book_id'];
+    $user_id = $_POST['user_id'];
 
-    echo $reading_list_name;
-    echo $book_id;
-    echo $user_id;
+    $reading_list_stmt = oci_parse($conn, "SELECT Id FROM ReadingLists WHERE user_id=".$user_id." AND name='".$reading_list_name."'");
+    oci_execute($reading_list_stmt, OCI_DEFAULT);
+    while ($reading_list_res = oci_fetch_row($reading_list_stmt))
+    {
+        $reading_list_id = $reading_list_res[0];
+    }
 
-    // $sql = "DELETE FROM BooksInReadingLists WHERE book_id IN (SELECT Id FROM Books WHERE title='".$book_name."') AND reading_list_id IN (SELECT Id FROM ReadingLists WHERE name='".$reading_list_name."' AND user_id=".$user_id.");";
+    $sql = "INSERT INTO BooksInReadingLists VALUES(".$book_id.", ".$reading_list_id.")";
 
-    // $insert_stmt
     $stmt = oci_parse($conn, $sql);
     oci_execute($stmt, OCI_DEFAULT);
     $err = oci_error($stmt);
@@ -24,15 +30,20 @@
 
         if($err_code == 1) {
             $error_msg = "Your User ID is already used. Please try another User ID.<br>\n";
+            print "<div class='alert alert-error'>".$error_msg."</div>";
         } else {
             $error_msg = "Some unknown database error occured. Please inform database administator with these error messages.<br>\n"."Error code : ".$err['code']."<br>"."Error message : ".$err['message']."<br>";
+            print "<div class='alert alert-error'>".$error_msg."</div>";
         }
     } else {
         oci_commit($conn);
+        print "<div class='alert alert-success'><p>Thank you, the book is added to the reading list</p></div>";
     }
 
     oci_close($conn);
-    print "<p>Thank you, the book is added to the reading list</p>";
+
   ?>
-  <p><a href="../user.php"> Back to homepage</a></p>
+  <footer>
+    <p><a href="../user.php?id=<?php echo $user_id?>"> Back to homepage</p
+  </footer>
 </html>

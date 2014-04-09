@@ -15,7 +15,7 @@
         $book_id = $_GET['id'];
         $user_id = $_GET['user_id'];
 
-        $query_for_book = "SELECT author, category, isbn FROM Books WHERE id=".$book_id ;
+        $query_for_book = "SELECT title, author, category, isbn FROM Books WHERE id=".$book_id ;
 
         print "<h3>Book Summary</p>";
 
@@ -30,9 +30,10 @@
         print "<div class='hero-unit'>";
         while ($book_res = oci_fetch_row($book_stmt))
         {
-                print "<p> Author: ".$book_res[0]."</p>";
-                print "<p> Category: ".$book_res[1]."</p>";
-                print "<p> ISBN: ".$book_res[2]."</p>";
+                print "<p> Title: ".$book_res[0]."</p>";
+                print "<p> Author: ".$book_res[1]."</p>";
+                print "<p> Category: ".$book_res[2]."</p>";
+                print "<p> ISBN: ".$book_res[3]."</p>";
         }
         print "</div>";
 
@@ -68,9 +69,10 @@
                 <option value=5> 5 </option>
             </select>
         </p>
-        <p>Description: <input type="text" name="description"></p>
-        <p>User Id: <input type="number" name="user_id" value="<?php echo $user_id; ?>"></p>
-        <p>Book Id: <input type="number" name="book_id" value="<?php echo $book_id; ?>"></p>
+
+        <textarea cols="60" rows="5" name="description"> Enter your comment here..</textarea>
+        <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
+        <input type="hidden" name="book_id" value="<?php echo $book_id; ?>">
         <p><input type="submit"/></p>
       </form>
       </section>

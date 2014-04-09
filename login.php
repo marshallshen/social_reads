@@ -41,7 +41,7 @@
       <h3> A social Network for readers </h3>
       <form class="form-signin" action="user.php" method="post">
         <h2 class="form-signin-heading">Please sign in</h2>
-        <input type="text" class="input-block-level" placeholder="User Id" name="user_id">
+        <input type="text" class="input-block-level" placeholder="User Id" name="id">
         <input type="password" class="input-block-level" placeholder="Password" name="password">
         <label class="checkbox">
           <input type="checkbox" value="remember-me"> Remember me
